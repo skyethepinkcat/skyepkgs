@@ -10,6 +10,6 @@
 #   nixpkgs.overlays = [ skyepkgs.overlays.default ];
 final: prev:
 import ./pkgs {
-  pkgs = prev;
+  pkgs = final;
   lib = import ./lib { inherit (prev) lib; };
 }
