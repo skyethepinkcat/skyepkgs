@@ -21,6 +21,9 @@
     makeWrapper
     openvox-lint
   ];
+  buildInputs = [
+    openvox-lint
+  ];
   postBuild = ''
     wrapProgram $out/bin/puppet-languageserver --prefix PATH : ${
       lib.makeBinPath [
