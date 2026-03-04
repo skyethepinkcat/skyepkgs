@@ -2,12 +2,13 @@
   bundlerApp,
   bundlerUpdateScript,
   lib,
-  ruby_3_4,
+  makeWrapper,
   openvox-lint,
+  puppet-editor-services,
   testers,
 }:
 
-(bundlerApp.override { ruby = ruby_3_4; }) {
+(bundlerApp) {
   pname = "puppet-editor-services";
   gemdir = ./.;
   exes = [
@@ -16,10 +17,18 @@
     "puppet-languageserver-sidecar"
   ];
 
-   nativeBuildInputs = [
-     ruby_3_4
+  nativeBuildInputs = [
+    makeWrapper
     openvox-lint
   ];
+  postBuild = ''
+    wrapProgram $out/bin/puppet-languageserver --prefix PATH : ${
+      lib.makeBinPath [
+        openvox-lint
+      ]
+    }
+  '';
+
   #   puppet
   # ];
   # postBuild = ''
@@ -28,6 +37,7 @@
 
   passthru = {
     tests.version = testers.testVersion {
+      package = puppet-editor-services;
       command = "HOME=$(mktemp -d) puppet-languageserver --version";
       inherit ((import ./gemset.nix).puppet-editor-services) version;
     };
