@@ -24,23 +24,6 @@
   buildInputs = [
     openvox-lint
   ];
-  postBuild = ''
-    wrapProgram $out/bin/puppet-languageserver --prefix PATH : ${
-      lib.makeBinPath [
-        openvox-lint
-      ]
-    }
-    wrapProgram $out/bin/puppet-languageserver-sidecar --prefix PATH : ${
-      lib.makeBinPath [
-        openvox-lint
-      ]
-    }
-    wrapProgram $out/bin/puppet-debugserver --prefix PATH : ${
-      lib.makeBinPath [
-        openvox-lint
-      ]
-    }
-  '';
 
   #   puppet
   # ];
