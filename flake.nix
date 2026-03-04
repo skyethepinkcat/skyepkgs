@@ -29,7 +29,14 @@
 
         checks = self.packages.${system};
 
-        formatter = pkgs.nixfmt-rfc-style;
+        formatter = pkgs.nixfmt;
+        devShells.default = pkgs.mkShell {
+          name = "skyepkgs-dev-shell";
+          buildInputs = with pkgs; [
+            nixfmt
+            nil
+          ];
+        };
       }
     )
     // {

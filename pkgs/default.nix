@@ -29,7 +29,7 @@ let
         builtins.listToAttrs (
           map (pname: {
             name = pname;
-            value = callPackage (./by-name + "/${prefix}/${pname}") { };
+            value = callPackage (./by-name + "/${prefix}/${pname}/package.nix") { };
           }) pkgDirs
         );
     in
