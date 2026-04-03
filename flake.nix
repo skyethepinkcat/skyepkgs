@@ -3,44 +3,56 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
-    }:
+    inputs@{ flake-parts, nixpkgs, ... }:
     let
       lib = import ./lib { inherit (nixpkgs) lib; };
       overlay = import ./overlay.nix;
     in
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ overlay ];
-        };
-      in
-      {
-        packages = import ./pkgs { inherit pkgs lib; };
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
-        checks = self.packages.${system};
+      perSystem =
+        { system, config, ... }:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ overlay ];
+          };
+        in
+        {
+          packages = import ./pkgs { inherit pkgs lib; };
 
-        formatter = pkgs.nixfmt;
-        devShells.default = pkgs.mkShell {
-          name = "skyepkgs-dev-shell";
-          buildInputs = with pkgs; [
-            nixfmt
-            nil
-          ];
+          checks = config.packages;
+
+          formatter = pkgs.nixfmt;
+
+          devShells.default = pkgs.mkShell {
+            name = "skyepkgs-dev-shell";
+            buildInputs = with pkgs; [
+              nixfmt
+              nil
+            ];
+          };
         };
-      }
-    )
-    // {
-      lib = lib;
-      overlays.default = overlay;
+
+      flake = {
+        inherit lib;
+
+        overlays.default = overlay;
+
+        templates.ruby = {
+          path = ./templates/ruby;
+          description = "A Ruby project using ruby-nix and bundix";
+        };
+      };
     };
 }
