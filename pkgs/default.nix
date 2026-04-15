@@ -15,6 +15,8 @@
 let
   callPackage = pkgs.lib.callPackageWith (pkgs // { inherit lib; });
 
+  vimPlugins = import ./vim-plugins { inherit pkgs lib; };
+
   # Import all packages listed under pkgs/by-name using the two-character
   # prefix convention (same as nixpkgs).  Each package lives at:
   #   pkgs/by-name/<2-char-prefix>/<pname>/default.nix
@@ -35,4 +37,4 @@ let
     in
     builtins.foldl' lib.recursiveUpdate { } (map packagesForPrefix prefixDirs);
 in
-byName
+byName // { inherit vimPlugins; }

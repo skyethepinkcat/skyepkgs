@@ -39,6 +39,7 @@
             name = "skyepkgs-dev-shell";
             buildInputs = with pkgs; [
               nixfmt
+              nix-update
               nil
             ];
           };
