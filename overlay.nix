@@ -9,7 +9,12 @@
 # Usage (flake, already wired up in flake.nix):
 #   nixpkgs.overlays = [ skyepkgs.overlays.default ];
 final: prev:
-import ./pkgs {
-  pkgs = final;
-  lib = import ./lib { inherit (prev) lib; };
+let
+  overlay-pkgs = import ./pkgs {
+    pkgs = final;
+    lib = import ./lib { inherit (prev) lib; };
+  };
+in
+overlay-pkgs // {
+  vimPlugins = prev.vimPlugins // overlay-pkgs.vimPlugins;
 }
