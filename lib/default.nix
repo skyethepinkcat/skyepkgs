@@ -18,6 +18,16 @@ lib.extend (
       # sets take precedence.  Useful when composing multiple package groups.
       mergePackageSets = pkgSets: builtins.foldl' prev.recursiveUpdate { } pkgSets;
 
+      autoImport = _:
+        with builtins;
+        with lib;
+        map (fn: ./${fn}) (
+          filter (fn: (fn != "default.nix" && (hasSuffix ".nix" "${fn}" || pathExists ./${fn}/default.nix))) (
+            attrNames (readDir ./.)
+          )
+        )
+      ;
+
     };
   }
 )
