@@ -90,10 +90,7 @@ in
 a `lib.skyepkgs` attribute set.
 
 ```nix
-# Access via flake
-skyepkgs.lib.skyepkgs.mkMeta { description = "My tool"; }
-
-# Or import directly
+# Import directly
 lib = import ./lib { inherit (nixpkgs) lib; };
 ```
 
@@ -103,7 +100,6 @@ lib = import ./lib { inherit (nixpkgs) lib; };
 |---|---|
 | `isValidPackageName name` | Returns `true` if `name` is a non-empty string. |
 | `mergePackageSets pkgSets` | Deep-merges a list of package-set attrsets. |
-| `mkMeta { ... }` | Constructs a standard `meta` block for a derivation. |
 
 ## Building / checking
 

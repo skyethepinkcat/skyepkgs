@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = lib.skyepkgs.mkMeta {
+  meta = {
     description = "Example package for skyepkgs";
     homepage = "https://github.com/skyethepinkcat/skyepkgs";
     license = lib.licenses.mit;

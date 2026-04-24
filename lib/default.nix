@@ -18,29 +18,6 @@ lib.extend (
       # sets take precedence.  Useful when composing multiple package groups.
       mergePackageSets = pkgSets: builtins.foldl' prev.recursiveUpdate { } pkgSets;
 
-      # Generate package metadata attrset for use in `meta` blocks.
-      # Example:
-      #   meta = lib.skyepkgs.mkMeta {
-      #     description = "My tool";
-      #     homepage = "https://example.com";
-      #   };
-      mkMeta =
-        {
-          description ? "",
-          homepage ? "",
-          license ? prev.licenses.mit,
-          maintainers ? [ ],
-          platforms ? prev.platforms.all,
-        }:
-        {
-          inherit
-            description
-            homepage
-            license
-            maintainers
-            platforms
-            ;
-        };
     };
   }
 )
