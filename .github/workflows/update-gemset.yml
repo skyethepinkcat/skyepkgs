@@ -1,0 +1,59 @@
+name: Update gemset.nix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/Gemfile"
+      - "**/Gemfile.lock"
+
+permissions:
+  contents: write
+
+jobs:
+  update-gemset:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Find changed package directories
+        id: changed
+        run: |
+          mapfile -t dirs < <(
+            git diff --name-only HEAD~1 HEAD \
+              | grep -E '(^|/)Gemfile(\.lock)?$' \
+              | xargs -r dirname \
+              | sort -u
+          )
+          printf '%s\n' "${dirs[@]}"
+          echo "dirs=${dirs[*]}" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate gemset.nix
+        if: steps.changed.outputs.dirs != ''
+        run: |
+          for dir in ${{ steps.changed.outputs.dirs }}; do
+            if [[ -f "$dir/Gemfile.lock" ]]; then
+              echo "--- $dir ---"
+              (cd "$dir" && nix run nixpkgs#bundix -- -l)
+            fi
+          done
+
+      - name: Commit updated gemset.nix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- '**/gemset.nix'
+          if git diff --cached --quiet; then
+            echo "gemset.nix unchanged"
+          else
+            git commit -m "chore(gemset): regenerate gemset.nix"
+            git push
+          fi
