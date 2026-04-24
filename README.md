@@ -17,7 +17,7 @@ pkgs/
   by-name/                         # nixpkgs-style package tree
     <2-char-prefix>/
       <pname>/
-        default.nix                # Package derivation
+        package.nix                # Package derivation
 ```
 
 Packages live under `pkgs/by-name/` using the same two-character prefix
@@ -27,8 +27,8 @@ subdirectory, e.g. `hello-skyepkgs` → `he/hello-skyepkgs/`).
 ## Adding a package
 
 1. Create a directory `pkgs/by-name/<2-char-prefix>/<pname>/`.
-2. Add a `default.nix` derivation inside it (see
-   [`pkgs/by-name/he/hello-skyepkgs/default.nix`](pkgs/by-name/he/hello-skyepkgs/default.nix)
+2. Add a `package.nix` derivation inside it (see
+   [`pkgs/by-name/he/hello-skyepkgs/package.nix`](pkgs/by-name/he/hello-skyepkgs/package.nix)
    for an example).
 3. The package is automatically picked up — no manual registration required.
 
