@@ -156,7 +156,7 @@ DEPENDENCIES
   racc
   syslog
   voxpupuli-puppet-lint-plugins
-  yard (~> 0.9.28)
+  yard
 
 BUNDLED WITH
    2.7.2

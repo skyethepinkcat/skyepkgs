@@ -28,8 +28,13 @@
             overlays = [ overlay ];
           };
         in
+        let
+          allPkgs = import ./pkgs { inherit pkgs lib; };
+        in
         {
-          packages = import ./pkgs { inherit pkgs lib; };
+          packages = builtins.removeAttrs allPkgs [ "vimPlugins" ];
+
+          legacyPackages.vimPlugins = allPkgs.vimPlugins;
 
           checks = config.packages;
 

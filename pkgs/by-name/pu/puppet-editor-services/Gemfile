@@ -11,4 +11,4 @@ gem "syslog"
 gem "ostruct"
 gem "benchmark"
 gem "racc"
-gem "yard", '~> 0.9.28'
+gem "yard"
