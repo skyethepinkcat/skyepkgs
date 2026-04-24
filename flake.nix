@@ -50,6 +50,11 @@
 
         overlays.default = overlay;
 
+        homeManagerModules = {
+          opencode-monitor = import ./modules/home-manager/opencode-monitor.nix;
+          default = import ./modules/home-manager/opencode-monitor.nix;
+        };
+
         templates.ruby = {
           path = ./templates/ruby;
           description = "A Ruby project using ruby-nix and bundix";
