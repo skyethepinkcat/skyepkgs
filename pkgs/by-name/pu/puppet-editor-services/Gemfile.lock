@@ -142,7 +142,7 @@ GEM
       puppet-lint-unquoted_string-check (~> 4.0)
       puppet-lint-variable_contains_upcase (~> 3.0)
       puppet-lint-version_comparison-check (~> 3.0)
-    yard (0.9.38)
+    yard (0.9.42)
 
 PLATFORMS
   ruby
