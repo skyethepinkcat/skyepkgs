@@ -15,7 +15,7 @@
 let
   callPackage = pkgs.lib.callPackageWith (pkgs // { inherit lib; });
 
-  vimPlugins = import ./vim-plugins { inherit pkgs lib; };
+  vimPlugins = callPackage ./vim-plugins { };
 
   # Import all packages listed under pkgs/by-name using the two-character
   # prefix convention (same as nixpkgs).  Each package lives at:

@@ -24,6 +24,6 @@ bundlerApp {
     #changelog = "https://github.com/puppetlabs/puppet-lint/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "puppet-lint";
-    #maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
 }

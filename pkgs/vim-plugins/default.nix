@@ -10,28 +10,34 @@
 #     src = fetchFromGitHub { ... };
 #   };
 {
-  pkgs,
-  lib ? pkgs.lib,
+  lib,
+  vimUtils,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 let
-  inherit (pkgs) vimUtils fetchFromGitHub nix-update-script;
+  version = "1.2.0";
 in
 {
-  # dashboard = vimUtils.buildVimPlugin {
-  #     pname = "dashboard-nvim";
-  #     version = "different_shortcuts";
-  #     src = pkgs.fetchFromGitHub {
-  #       owner = "skyethepinkcat";
-  #       repo = "dashboard-nvim";
-  #       rev = "0eda18b79813745203a57c1e26a058c2df8b573e";
-  #       hash = "sha256-ElzyvHxlbn6zoCvbWZseV2DUIIrChkuXNR1BOeWV+QU=";
-  #     };
-  #     meta.homepage = "https://github.com/nvimdev/dashboard-nvim/";
-  #     meta.hydraPlatforms = [ ];
-  #     passthru.updateScript = nix-update-script {
-  #       attrPath = "vimPlugins.dashboard";
-  #     };
-  #   };
+
+  colortils-nvim = vimUtils.buildVimPlugin {
+    pname = "colortils-nvim";
+    name = "colortils.nvim";
+    inherit version;
+    src = fetchFromGitHub {
+      owner = "max397574";
+      repo = "colortils.nvim";
+      rev = "v${version}";
+      sha256 = "03lj24zm48rc7rj69j2z3345k7frrzvn6jqr51d34adkv682180r";
+    };
+    meta = {
+      homepage = "https://github.com/max397574/colortils.nvim";
+      maintainers = with lib.maintainers; [ skyethepinkcat ];
+    };
+    passthru.updateScript = nix-update-script {
+      attrPath = "vimPlugins.colortils-nvim";
+    };
+  };
 
   # Add vim plugins here
 }

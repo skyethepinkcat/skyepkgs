@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [ "aarch64-darwin" ];
       license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ skyethepinkcat ];
     };
   }
 )

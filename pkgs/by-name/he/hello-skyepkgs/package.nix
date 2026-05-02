@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/skyethepinkcat/skyepkgs";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
 })

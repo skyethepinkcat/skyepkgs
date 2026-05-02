@@ -32,5 +32,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Shlomob/ocmonitor-share";
     license = lib.licenses.mit;
     mainProgram = "ocmonitor";
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
 }
