@@ -19,16 +19,6 @@
     };
     version = "0.5.0";
   };
-  CFPropertyList = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0qa226xndfs9r6c7qj7zs6yhzrcbmicvvxsjn9x3svakh3cx169c";
-      type = "gem";
-    };
-    version = "3.0.8";
-  };
   concurrent-ruby = {
     groups = [ "default" ];
     platforms = [ ];
@@ -74,6 +64,16 @@
     };
     version = "3.1.0";
   };
+  fiddle = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1vifygrkw22gcd4wzh8gc4pv6h1zpk6kll6mmprrf5174wvfxa3z";
+      type = "gem";
+    };
+    version = "1.1.8";
+  };
   forwardable = {
     groups = [ "default" ];
     platforms = [ ];
@@ -104,10 +104,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "15c8widbdm4p7686aryy8gghrh0m7d0938s7h0lgr5w8skbc5nzg";
+      sha256 = "1rlkrfbvav170xzbkiab7j4zmq5jbn6gsznca696a47km2dgqqxl";
       type = "gem";
     };
-    version = "5.0.0";
+    version = "5.0.1";
   };
   highline = {
     dependencies = [ "reline" ];
@@ -141,14 +141,15 @@
     version = "0.8.2";
   };
   locale = {
+    dependencies = [ "fiddle" ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "107pm4ccmla23z963kyjldgngfigvchnv85wr6m69viyxxrrjbsj";
+      sha256 = "1x1fnf4knvyzb9br6ja7b1nvy0860nax0i8rx4ljrnvbmbl06s0w";
       type = "gem";
     };
-    version = "2.1.4";
+    version = "2.1.5";
   };
   logger = {
     groups = [ "default" ];
@@ -175,10 +176,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1drisvysgvnjlz49a0qcbs294id6mvj3i8iik5rvym68ybwfzvvs";
+      sha256 = "1040lr5y2phn7avdyam6zw6ikprlmk77biw3yhclsfwfh0qnl4p6";
       type = "gem";
     };
-    version = "1.19.1";
+    version = "1.21.1";
   };
   optimist = {
     groups = [ "default" ];
@@ -644,9 +645,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0s5spcxxhpfxl8spmv2rjxy0sq0yh16d8cbp969n0m93hqgy0asf";
+      sha256 = "08aq3im74b20ixmhkpi2dlgsc59231grnzljcahz4pa8y2l371yg";
       type = "gem";
     };
-    version = "0.9.42";
+    version = "0.9.43";
   };
 }

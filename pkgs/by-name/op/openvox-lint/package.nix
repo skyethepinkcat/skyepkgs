@@ -5,7 +5,7 @@
   testers,
 }:
 
-bundlerApp {
+(bundlerApp {
   pname = "puppet-lint";
   gemdir = ./.;
   exes = [ "puppet-lint" ];
@@ -15,7 +15,7 @@ bundlerApp {
       #package = openvox-lint;
       inherit ((import ./gemset.nix).puppet-lint) version;
     };
-    updateScript = bundlerUpdateScript "puppet-lint";
+    updateScript = bundlerUpdateScript "openvox-lint";
   };
 
   meta = {
@@ -26,4 +26,6 @@ bundlerApp {
     mainProgram = "puppet-lint";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
-}
+}).overrideAttrs (_: {
+  version = (import ./gemset.nix).puppet-lint.version;
+})

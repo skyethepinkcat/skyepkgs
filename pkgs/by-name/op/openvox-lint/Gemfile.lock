@@ -73,7 +73,6 @@ GEM
       puppet-lint-version_comparison-check (~> 3.0)
 
 PLATFORMS
-  arm64-darwin-25
   ruby
 
 DEPENDENCIES

@@ -8,7 +8,7 @@
   testers,
 }:
 
-bundlerApp {
+(bundlerApp {
   pname = "puppet-editor-services";
   gemdir = ./.;
   exes = [
@@ -24,12 +24,6 @@ bundlerApp {
     makeWrapper
     openvox-lint
   ];
-
-  #   puppet
-  # ];
-  # postBuild = ''
-  #   bundle exec rake gem_revendor
-  # '';
 
   passthru = {
     tests.version = testers.testVersion {
@@ -48,4 +42,6 @@ bundlerApp {
     mainProgram = "puppet-languageserver";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
-}
+}).overrideAttrs (_: {
+  version = (import ./gemset.nix).puppet-editor-services.version;
+})
