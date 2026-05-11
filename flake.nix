@@ -26,7 +26,6 @@
       systems = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
 
@@ -37,12 +36,10 @@
             inherit system;
             overlays = [ overlay ];
           };
-        in
-        let
           allPkgs = import ./pkgs { inherit pkgs lib; };
         in
         {
-          packages = builtins.removeAttrs allPkgs [ "vimPlugins" ];
+          packages = removeAttrs allPkgs [ "vimPlugins" ];
 
           legacyPackages.vimPlugins = allPkgs.vimPlugins;
 
@@ -51,13 +48,15 @@
           treefmt = {
             projectRootFile = "flake.nix";
             programs.nixfmt.enable = true;
+            programs.statix.enable = true;
           };
 
           devShells.default = pkgs.mkShell {
             name = "skyepkgs-dev-shell";
             buildInputs = with pkgs; [
               nix-update
-              nil
+              nixd
+              nixfmt
             ];
           };
         };

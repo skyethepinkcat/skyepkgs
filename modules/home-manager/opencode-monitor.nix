@@ -16,7 +16,7 @@ in
     package = lib.mkPackageOption pkgs "opencode-monitor" { };
 
     settings = lib.mkOption {
-      type = toml.type;
+      inherit (toml) type;
       default = { };
       description = "Configuration written to ~/.config/ocmonitor/config.toml";
     };

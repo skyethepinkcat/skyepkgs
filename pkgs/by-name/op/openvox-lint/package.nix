@@ -13,7 +13,7 @@ bundlerApp {
   passthru = {
     tests.version = testers.testVersion {
       #package = openvox-lint;
-      version = (import ./gemset.nix).puppet-lint.version;
+      inherit ((import ./gemset.nix).puppet-lint) version;
     };
     updateScript = bundlerUpdateScript "puppet-lint";
   };
