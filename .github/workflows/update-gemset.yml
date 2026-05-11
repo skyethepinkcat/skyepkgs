@@ -46,6 +46,15 @@ jobs:
             fi
           done
 
+      - name: Format gemset.nix
+        if: steps.changed.outputs.dirs != ''
+        run: |
+          for dir in ${{ steps.changed.outputs.dirs }}; do
+            if [[ -f "$dir/gemset.nix" ]]; then
+              nix run nixpkgs#nixfmt-rfc-style -- "$dir/gemset.nix"
+            fi
+          done
+
       - name: Commit updated gemset.nix
         run: |
           git config user.name "github-actions[bot]"
