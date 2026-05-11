@@ -15,6 +15,7 @@ let
     lib = import ./lib { inherit (prev) lib; };
   };
 in
-overlay-pkgs // {
+overlay-pkgs
+// {
   vimPlugins = prev.vimPlugins // overlay-pkgs.vimPlugins;
 }

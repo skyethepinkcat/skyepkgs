@@ -4,15 +4,25 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs =
-    inputs@{ flake-parts, nixpkgs, ... }:
+    inputs@{
+      flake-parts,
+      nixpkgs,
+      treefmt-nix,
+      ...
+    }:
     let
       lib = import ./lib { inherit (nixpkgs) lib; };
       overlay = import ./overlay.nix;
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        treefmt-nix.flakeModule
+      ];
+
       systems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -38,12 +48,14 @@
 
           checks = config.packages;
 
-          formatter = pkgs.nixfmt;
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs.nixfmt.enable = true;
+          };
 
           devShells.default = pkgs.mkShell {
             name = "skyepkgs-dev-shell";
             buildInputs = with pkgs; [
-              nixfmt
               nix-update
               nil
             ];

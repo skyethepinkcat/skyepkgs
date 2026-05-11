@@ -8,7 +8,7 @@
   testers,
 }:
 
-(bundlerApp) {
+bundlerApp {
   pname = "puppet-editor-services";
   gemdir = ./.;
   exes = [
@@ -18,10 +18,10 @@
   ];
 
   nativeBuildInputs = [
-    makeWrapper
     openvox-lint
   ];
   buildInputs = [
+    makeWrapper
     openvox-lint
   ];
 

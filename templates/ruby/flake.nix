@@ -73,16 +73,15 @@
         devShells = rec {
           default = dev;
           dev = pkgs.mkShell {
-            buildInputs =
-              [
-                env
-                bundixcli
-                bundleLock
-                bundleUpdate
-              ]
-              ++ (with pkgs; [
-                hello
-              ]);
+            buildInputs = [
+              env
+              bundixcli
+              bundleLock
+              bundleUpdate
+            ]
+            ++ (with pkgs; [
+              hello
+            ]);
           };
         };
       }

@@ -12,29 +12,32 @@
   pkgs,
   lib ? pkgs.lib,
 }:
-let
-  callPackage = pkgs.lib.callPackageWith (pkgs // { inherit lib; });
+lib.fix (
+  self:
+  let
+    callPackage = pkgs.lib.callPackageWith (pkgs // self // { inherit lib; });
 
-  vimPlugins = callPackage ./vim-plugins { };
+    vimPlugins = callPackage ./vim-plugins { };
 
-  # Import all packages listed under pkgs/by-name using the two-character
-  # prefix convention (same as nixpkgs).  Each package lives at:
-  #   pkgs/by-name/<2-char-prefix>/<pname>/default.nix
-  byName =
-    let
-      prefixDirs = builtins.attrNames (builtins.readDir ./by-name);
-      packagesForPrefix =
-        prefix:
-        let
-          pkgDirs = builtins.attrNames (builtins.readDir (./by-name + "/${prefix}"));
-        in
-        builtins.listToAttrs (
-          map (pname: {
-            name = pname;
-            value = callPackage (./by-name + "/${prefix}/${pname}/package.nix") { };
-          }) pkgDirs
-        );
-    in
-    builtins.foldl' lib.recursiveUpdate { } (map packagesForPrefix prefixDirs);
-in
-byName // { inherit vimPlugins; }
+    # Import all packages listed under pkgs/by-name using the two-character
+    # prefix convention (same as nixpkgs).  Each package lives at:
+    #   pkgs/by-name/<2-char-prefix>/<pname>/default.nix
+    byName =
+      let
+        prefixDirs = builtins.attrNames (builtins.readDir ./by-name);
+        packagesForPrefix =
+          prefix:
+          let
+            pkgDirs = builtins.attrNames (builtins.readDir (./by-name + "/${prefix}"));
+          in
+          builtins.listToAttrs (
+            map (pname: {
+              name = pname;
+              value = callPackage (./by-name + "/${prefix}/${pname}/package.nix") { };
+            }) pkgDirs
+          );
+      in
+      builtins.foldl' lib.recursiveUpdate { } (map packagesForPrefix prefixDirs);
+  in
+  byName // { inherit vimPlugins; }
+)
