@@ -39,5 +39,23 @@ in
     };
   };
 
+  dashboard-nvim = vimUtils.buildVimPlugin {
+    pname = "dashboard-nvim";
+    version = "0-unstable-2026-04-17-1";
+    src = fetchFromGitHub {
+      owner = "skyethepinkcat";
+      repo = "dashboard-nvim";
+      rev = "6e51374";
+      hash = "sha256-9c9N6tAyxkbkN6zfBqEkAEDq5AmEakxnvLbKeuM2Zzc";
+    };
+    meta = {
+      meta = {
+        homepage = "https://github.com/nvimdev/dashboard-nvim/";
+      };
+      license = "MIT";
+      hydraPlatforms = [ ];
+    };
+  };
+
   # Add vim plugins here
 }
