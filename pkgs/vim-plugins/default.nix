@@ -45,8 +45,8 @@ in
     src = fetchFromGitHub {
       owner = "skyethepinkcat";
       repo = "dashboard-nvim";
-      rev = "6e51374";
-      hash = "sha256-9c9N6tAyxkbkN6zfBqEkAEDq5AmEakxnvLbKeuM2Zzc";
+      rev = "fbfada3";
+      hash = "sha256-5y+hK6ZlnwzCxfDaWDMwl1fljgWjFUGAF2iZo0Zc508=";
     };
     meta = {
       meta = {
