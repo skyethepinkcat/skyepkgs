@@ -40,13 +40,16 @@
             overlays = [ overlay ];
           };
           allPkgs = import ./pkgs { inherit pkgs lib; };
+          availablePkgs = lib.filterAttrs (
+            _: p: lib.meta.availableOn pkgs.stdenv.hostPlatform p
+          ) (removeAttrs allPkgs [ "vimPlugins" ]);
         in
         {
-          packages = removeAttrs allPkgs [ "vimPlugins" ];
+          packages = availablePkgs;
 
           legacyPackages.vimPlugins = allPkgs.vimPlugins;
 
-          checks = config.packages;
+          checks = availablePkgs;
 
           treefmt = {
             projectRootFile = "flake.nix";
