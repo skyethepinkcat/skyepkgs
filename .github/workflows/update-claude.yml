@@ -1,0 +1,40 @@
+name: Update claude
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - uses: cachix/cachix-action@v17
+        with:
+          name: skyethepinkcat
+          # If you chose API tokens for write access OR if you have a private cache
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Run update script
+        run: nix shell nixpkgs#nix-update -c ./update.sh claude
+
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(pkgs): update claude"
+          branch: auto/update-claude
+          delete-branch: true
+          title: "chore(pkgs): update claude"
+          body: |
+            Automated weekly update via `./update.sh claude`.
