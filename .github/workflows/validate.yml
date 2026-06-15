@@ -33,7 +33,9 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Evaluate all package derivations
-        run: nix flake check --no-build
+        run: nix flake check --no-build --impure
+        env:
+          NIXPKGS_ALLOW_UNFREE: "1"
 
       - name: Check formatting
         run: |
