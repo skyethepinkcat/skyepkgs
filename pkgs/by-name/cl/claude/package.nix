@@ -45,22 +45,22 @@ stdenvNoCC.mkDerivation (
             nix-update
           ];
           text = ''
-            version=$(curl -fsSL "https://downloads.claude.ai/releases/darwin/universal/RELEASES.json" | python3 -c "
-import json, sys, re
-data = json.load(sys.stdin)
-pattern = re.compile(r'/(\d+(?:\.\d+)+)/Claude[._-]([0-9a-f]+)\.zip', re.I)
-versions = []
-for release in data.get('releases', []):
-    url = (release.get('updateTo') or {}).get('url', "")
-    m = pattern.search(url)
-    if m:
-        versions.append((m.group(1), m.group(2)))
-if not versions:
-    sys.exit(1)
-latest = max(versions, key=lambda x: [int(p) for p in x[0].split('.')])
-print(f'{latest[0]},{latest[1]}')
-")
-            exec nix-update --flake --version "$version" "$@"
+                        version=$(curl -fsSL "https://downloads.claude.ai/releases/darwin/universal/RELEASES.json" | python3 -c "
+            import json, sys, re
+            data = json.load(sys.stdin)
+            pattern = re.compile(r'/(\d+(?:\.\d+)+)/Claude[._-]([0-9a-f]+)\.zip', re.I)
+            versions = []
+            for release in data.get('releases', []):
+                url = (release.get('updateTo') or {}).get('url', "")
+                m = pattern.search(url)
+                if m:
+                    versions.append((m.group(1), m.group(2)))
+            if not versions:
+                sys.exit(1)
+            latest = max(versions, key=lambda x: [int(p) for p in x[0].split('.')])
+            print(f'{latest[0]},{latest[1]}')
+            ")
+                        exec nix-update --flake --version "$version" "$@"
           '';
         };
       in

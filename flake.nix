@@ -40,9 +40,9 @@
             overlays = [ overlay ];
           };
           allPkgs = import ./pkgs { inherit pkgs lib; };
-          availablePkgs = lib.filterAttrs (
-            _: p: lib.meta.availableOn pkgs.stdenv.hostPlatform p
-          ) (removeAttrs allPkgs [ "vimPlugins" ]);
+          availablePkgs = lib.filterAttrs (_: p: lib.meta.availableOn pkgs.stdenv.hostPlatform p) (
+            removeAttrs allPkgs [ "vimPlugins" ]
+          );
         in
         {
           packages = availablePkgs;

@@ -26,6 +26,7 @@
     mainProgram = "puppet-lint";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
-}).overrideAttrs (_: {
-  version = (import ./gemset.nix).puppet-lint.version;
-})
+}).overrideAttrs
+  (_: {
+    version = (import ./gemset.nix).puppet-lint.version;
+  })

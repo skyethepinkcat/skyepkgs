@@ -42,6 +42,7 @@
     mainProgram = "puppet-languageserver";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
-}).overrideAttrs (_: {
-  version = (import ./gemset.nix).puppet-editor-services.version;
-})
+}).overrideAttrs
+  (_: {
+    version = (import ./gemset.nix).puppet-editor-services.version;
+  })

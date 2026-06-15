@@ -16,7 +16,6 @@ nix flake check --no-build   # fast eval, no build — use for validation
 nix flake check              # build everything
 nix build .#<pname>          # single package
 nix fmt                      # format all .nix files
-nix run .#formatter -- --check $(git ls-files '*.nix')  # check format, no modify
 nix develop                  # dev shell with nixfmt, nix-update, nil
 nix-update <pname>           # update package hash/version
 ```

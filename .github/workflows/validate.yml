@@ -39,4 +39,4 @@ jobs:
 
       - name: Check formatting
         run: |
-          nix run .#formatter -- --check $(git ls-files '*.nix')
+          nix fmt
