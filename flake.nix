@@ -63,6 +63,7 @@
               nix-update
               nixd
               nixfmt
+              just
             ];
           };
         };
