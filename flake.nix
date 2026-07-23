@@ -82,6 +82,10 @@
           path = ./templates/ruby;
           description = "A Ruby project using ruby-nix and bundix";
         };
+        templates.trivial = {
+          path = ./templates/trivial;
+          description = "A basic flake template for devshells.";
+        };
       };
     };
 }
