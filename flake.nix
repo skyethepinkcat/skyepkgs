@@ -58,7 +58,7 @@
           };
 
           devShells.default = pkgs.mkShell {
-            name = "skyepkgs-dev-shell";
+            name = "skyepkgs";
             buildInputs = with pkgs; [
               nix-update
               nixd
