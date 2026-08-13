@@ -20,7 +20,7 @@ GEM
     highline (3.1.2)
       reline
     hocon (1.4.0)
-    io-console (0.8.2)
+    io-console (0.9.2)
     locale (2.1.5)
       fiddle
     logger (1.7.0)
@@ -100,7 +100,7 @@ GEM
       molinillo (~> 0.6)
       semantic_puppet (~> 1.0)
     racc (1.8.1)
-    reline (0.6.3)
+    reline (0.7.0)
       io-console (~> 0.5)
     rgen (0.10.2)
     scanf (1.0.0)
