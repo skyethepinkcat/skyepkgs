@@ -2,7 +2,7 @@
   description = "skyepkgs - Personal Nix package repository";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -75,7 +75,8 @@
 
         homeManagerModules = {
           opencode-monitor = import ./modules/home-manager/opencode-monitor.nix;
-          default = import ./modules/home-manager/opencode-monitor.nix;
+          iterm2-shell-integration = import ./modules/home-manager/iterm2-shell-integration.nix;
+          default = import ./modules/home-manager/default.nix;
         };
 
         templates.ruby = {
