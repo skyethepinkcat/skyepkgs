@@ -1,9 +1,13 @@
 {
   fetchFromGitHub,
   stdenv,
+  SDL2,
+  bison,
+  zlib,
+  flex,
 }:
 let
-  pkgs = (builtins.getFlake "github:nixos/nixpkgs/nixos-21.11").legacyPackages."${stdenv.system}";
+  pkgs = (builtins.getFlake "github:nixos/nixpkgs/nixos-22.11").legacyPackages."${stdenv.system}";
 in
 pkgs.stdenv.mkDerivation {
   name = "nhfourk";
@@ -14,13 +18,12 @@ pkgs.stdenv.mkDerivation {
     hash = "sha256-tfCOFPje9VI4dkJyHTm4InYNePAUsFUfeTszXrUn3BA=";
   };
 
-  nativeBuildInputs = with pkgs;[
-    SDL2
-    zlib
-    flex
-    bison
-    perl
-    perl534
+  nativeBuildInputs = [
+    pkgs.SDL2
+    pkgs.zlib
+   pkgs.flex
+   pkgs.bison
+    pkgs.perl
   ];
   buildPhase = ''
     runHook preBuild
