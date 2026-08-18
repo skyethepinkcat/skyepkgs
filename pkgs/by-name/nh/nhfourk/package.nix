@@ -1,11 +1,11 @@
 {
   fetchFromGitHub,
   stdenv,
-  sdl2-compat,
-zlib,
-perl,
 }:
-stdenv.mkDerivation {
+let
+  pkgs = (builtins.getFlake "github:nixos/nixpkgs/nixos-21.11").legacyPackages."${stdenv.system}";
+in
+pkgs.stdenv.mkDerivation {
   name = "nhfourk";
   src = fetchFromGitHub {
     owner = "tsadok";
@@ -14,14 +14,19 @@ stdenv.mkDerivation {
     hash = "sha256-tfCOFPje9VI4dkJyHTm4InYNePAUsFUfeTszXrUn3BA=";
   };
 
-  nativeBuildInputs = [
-    sdl2-compat
+  nativeBuildInputs = with pkgs;[
+    SDL2
     zlib
+    flex
+    bison
     perl
+    perl534
   ];
   buildPhase = ''
     runHook preBuild
     mkdir build
+    patchShebangs --build aimake scripts/*
+
     cd build
     ../aimake
 
