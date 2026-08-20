@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./gcc-flag-fix.patch
-    # ./aimake-update.patch # pull patches from nethack4
+    ./aimake-update.patch # pull patches from nethack4
   ];
   nativeBuildInputs = [
     libc
@@ -53,14 +53,15 @@ stdenv.mkDerivation {
     flex
     bison
     # old-nixpkgs.perl
-    (perl.overrideAttrs (oldattrs: rec {
-      version = "5.38.2";
-      src = fetchurl {
-        url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
-        sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
-      };
-      patches = [ ]; # This probably won't create a full working perl, but its enough to run aimake
-    }))
+    perl
+    # (perl.overrideAttrs (oldattrs: rec {
+    #   version = "5.38.2";
+    #   src = fetchurl {
+    #     url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
+    #     sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
+    #   };
+    #   patches = [ ]; # This probably won't create a full working perl, but its enough to run aimake
+    # }))
     jansson
   ]
   ++ lib.optionals (withGui) [
