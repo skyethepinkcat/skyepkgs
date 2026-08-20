@@ -1,26 +1,25 @@
 {
-  fetchFromGitHub,
-  stdenv,
   SDL2,
-  bison,
-  perl,
-  llvmPackages,
-gccStdenv,
-  libcxx,
-  libc,
-  zlib,
+  coreutils,
+  fetchFromGitHub,
+  fetchurl,
   flex,
   jansson,
-  lib,
-  withGui ? false,
-  coreutils,
   less,
+  lib,
+  libc,
   libpng,
-  fetchurl,
+  perl,
+  stdenv,
+  zlib,
+  bison,
+  withGui ? false,
 }:
 let
   rev = "479383a";
   userDir = "~/.config/NetHackFourk/";
+  # old-nixpkgs =
+  #   (builtins.getFlake "github:nixos/nixpkgs/nixos-22.11").legacyPackages.${stdenv.system};
   binPath = lib.makeBinPath [
     coreutils
     less
@@ -31,16 +30,12 @@ let
     "--override-directory gamesdatadir=$out/share/data"
     "--override-directory gamesstatedir=$out/share/save"
     "--override-directory shortcutdir=$out/share/applications"
-    "-vvv"
   ];
-
 in
-
-gccStdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "nhfourk";
   version = "4.3.0.4-${rev}";
-  hardeningDisable = [ "all" ];
-  __strict_deps = true;
+  hardeningDisable = [ "format" ];
   src = fetchFromGitHub {
     owner = "tsadok";
     repo = "nhfourk";
@@ -49,25 +44,23 @@ gccStdenv.mkDerivation {
   };
 
   patches = [
-    ./aimake-update.patch # pull patches from nethack4
+    ./gcc-flag-fix.patch
+    # ./aimake-update.patch # pull patches from nethack4
   ];
   nativeBuildInputs = [
-      libc
-      libcxx
-
-
+    libc
     zlib
     flex
     bison
-    perl
-    # (perl.overrideAttrs (oldattrs: rec {
-    #   version = "5.38.2";
-    #   src = fetchurl {
-    #     url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
-    #     sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
-    #   };
-    #   patches = [ ]; # This won't create a full working perl, but its enough to run aimake
-    # }))
+    # old-nixpkgs.perl
+    (perl.overrideAttrs (oldattrs: rec {
+      version = "5.38.2";
+      src = fetchurl {
+        url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
+        sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
+      };
+      patches = [ ]; # This probably won't create a full working perl, but its enough to run aimake
+    }))
     jansson
   ]
   ++ lib.optionals (withGui) [
@@ -76,18 +69,7 @@ gccStdenv.mkDerivation {
   ];
   configurePhase = ''
     runHook preConfigure
-    patchShebangs aimake scripts/*
-
-    cat <<EOF >aimake.local
-        {
-            options => {
-              AM_LFLAGS => '-lSystem',
-            },
-            libraries => {
-                'System' => 'stdio',
-            },
-        }
-    EOF
+    patchShebangs --build aimake scripts/*
 
     runHook postConfigure
   '';
