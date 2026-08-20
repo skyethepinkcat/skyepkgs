@@ -3,25 +3,22 @@
   stdenv,
   SDL2,
   bison,
+  perl,
+  llvmPackages,
+gccStdenv,
+  libcxx,
+  libc,
   zlib,
   flex,
   jansson,
   lib,
   withGui ? false,
-  gccStdenv,
   coreutils,
   less,
   libpng,
+  fetchurl,
 }:
 let
-  old-nixpkgs = import (fetchTarball {
-    # Descriptive name to make the store path easier to identify
-    name = "nixos-23.11";
-    # Commit hash for nixos-unstable as of 2018-09-12
-    url = "https://github.com/NixOS/nixpkgs/archive/205fd4226592cc83fd4c0885a3e4c9c400efabb5.tar.gz";
-    sha256 = "sha256-zwVvxrdIzralnSbcpghA92tWu2DV2lwv89xZc8MTrbg=";
-  }) { inherit (stdenv.hostPlatform) system; };
-  # pkgs = (builtins.getFlake "github:nixos/nixpkgs/nixos-23.11").legacyPackages."${stdenv.system}";
   rev = "479383a";
   userDir = "~/.config/NetHackFourk/";
   binPath = lib.makeBinPath [
@@ -34,14 +31,16 @@ let
     "--override-directory gamesdatadir=$out/share/data"
     "--override-directory gamesstatedir=$out/share/save"
     "--override-directory shortcutdir=$out/share/applications"
+    "-vvv"
   ];
 
 in
 
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   name = "nhfourk";
   version = "4.3.0.4-${rev}";
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "all" ];
+  __strict_deps = true;
   src = fetchFromGitHub {
     owner = "tsadok";
     repo = "nhfourk";
@@ -50,13 +49,25 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    ./patch1.patch
+    ./aimake-update.patch # pull patches from nethack4
   ];
   nativeBuildInputs = [
+      libc
+      libcxx
+
+
     zlib
     flex
     bison
-    old-nixpkgs.perl
+    perl
+    # (perl.overrideAttrs (oldattrs: rec {
+    #   version = "5.38.2";
+    #   src = fetchurl {
+    #     url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
+    #     sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
+    #   };
+    #   patches = [ ]; # This won't create a full working perl, but its enough to run aimake
+    # }))
     jansson
   ]
   ++ lib.optionals (withGui) [
@@ -65,7 +76,18 @@ stdenv.mkDerivation {
   ];
   configurePhase = ''
     runHook preConfigure
-    patchShebangs --build aimake scripts/*
+    patchShebangs aimake scripts/*
+
+    cat <<EOF >aimake.local
+        {
+            options => {
+              AM_LFLAGS => '-lSystem',
+            },
+            libraries => {
+                'System' => 'stdio',
+            },
+        }
+    EOF
 
     runHook postConfigure
   '';
