@@ -2,12 +2,10 @@
   SDL2,
   coreutils,
   fetchFromGitHub,
-  fetchurl,
   flex,
   jansson,
   less,
   lib,
-  libc,
   libpng,
   perl,
   stdenv,
@@ -16,6 +14,7 @@
   withGui ? false,
 }:
 let
+  inherit (stdenv.hostPlatform) isDarwin;
   rev = "479383a";
   userDir = "~/.config/NetHackFourk/";
   binPath = lib.makeBinPath [
@@ -25,10 +24,12 @@ let
   aimake_flags = lib.strings.join " " [
     (if withGui then "--with=gui" else "--without=gui")
     "--without=jansson"
+    "--override-directory gamesbindir=$out"
     "--override-directory gamesdatadir=$out/share/data"
     "--override-directory gamesstatedir=$out/share/save"
     "--override-directory shortcutdir=$out/share/applications"
   ];
+  aimake_local = ./aimake.local;
 in
 stdenv.mkDerivation {
   name = "nhfourk";
@@ -41,52 +42,55 @@ stdenv.mkDerivation {
     hash = "sha256-tfCOFPje9VI4dkJyHTm4InYNePAUsFUfeTszXrUn3BA=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   patches = [
-    ./gcc-flag-fix.patch
-    ./aimake-update.patch # pull patches from nethack4
+    ./gcc-flag-fix.patch # required for header pre-compiliation to work
+    ./aimake-update.patch # pull patches from nethack4 so new perl versions work
+  ]
+  ++ lib.optionals isDarwin [
+    ./darwin-fix.patch # aimake needs to recognize .tbd files as valid libraries on darwin.
   ];
   nativeBuildInputs = [
-    libc
     zlib
     flex
     bison
-    # old-nixpkgs.perl
     perl
-    # (perl.overrideAttrs (oldattrs: rec {
-    #   version = "5.38.2";
-    #   src = fetchurl {
-    #     url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
-    #     sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
-    #   };
-    #   patches = [ ]; # This probably won't create a full working perl, but its enough to run aimake
-    # }))
     jansson
   ]
-  ++ lib.optionals (withGui) [
+  ++ lib.optionals withGui [
     SDL2
     libpng
   ];
+
+  # We need to throw in some rules to handle .tbd system libraries on darwin systems, that's what
+  # this aimake.local file does.
+  preConfigure = lib.optionalString isDarwin ''
+    cp ${aimake_local} aimake.local
+  '';
+
   configurePhase = ''
     runHook preConfigure
     patchShebangs --build aimake scripts/*
 
     runHook postConfigure
   '';
+
   buildPhase = ''
     runHook preBuild
 
     mkdir build
     cd build
+    mkdir -p $out
     ../aimake ${aimake_flags}
     runHook postBuild
   '';
-  outputs = [
-    "out"
-    "man"
-  ];
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
 
     ../aimake --install-only  ${aimake_flags} -i $out
 
@@ -130,46 +134,9 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/nhfourk
   '';
-  #   mkdir -p $out/games/lib/nethackuserdir
-  #   mv $out/var/games/nhfourk/* $out/games/lib/nethackuserdir
-  #
-  #   mkdir -p $out/bin
-  #   cat <<EOF >$out/bin/nethack
-  #   #! ${stdenvUsed.shell} -e
-  #   PATH=${binPath}:\$PATH
-  #
-  #   if [ ! -d ${userDir} ]; then
-  #     mkdir -p ${userDir}
-  #     cp -r $out/games/lib/nethackuserdir/* ${userDir}
-  #     chmod -R +w ${userDir}
-  #   fi
-  #
-  #   RUNDIR=\$(mktemp -d)
-  #
-  #   cleanup() {
-  #     rm -rf \$RUNDIR
-  #   }
-  #   trap cleanup EXIT
-  #
-  #   cd \$RUNDIR
-  #   for i in ${userDir}/*; do
-  #     ln -s \$i \$(basename \$i)
-  #   done
-  #   for i in $out//lib/nethackdir/*; do
-  #     ln -s \$i \$(basename \$i)
-  #   done
-  #   set +e
-  #   $out/games/nethack "\$@"
-  #   if [[ \$? -gt 128 ]]; then
-  #     echo "nethack exited abnormally, attempting to recover save file..."
-  #     ./recover -d . ?lock.0
-  #   fi
-  #   EOF
-  #   chmod +x $out/bin/nethack
-  #   ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
-  #   ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
-  #   install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
-  #   ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
-  # '';
-
+  meta = {
+    description = "A fork of nethack4.";
+    mainProgram = "nhfourk";
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
+  };
 }

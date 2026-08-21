@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+{
+  rules => {
+    find_default_tbd_libraries => {
+        command => ['tool:c_cxx_linker', "bpath:aimake/aimake_1$objext",
+                    "optpath::bpath:aimake/aimake_1$objext",
+                    "optpath:-o :bpath:aimake/aimake_1$exeext",
+                    "optstring:-Wl,-t"],
+        output => qr/^(?:(?:-l|lib)[^ ]+ )?\(?(.*?\/.*?(?<!aimake_1)(?:tbd))\z/s,
+        output_as_standardlib => 1,
+        filter_text_files => 0, # Tbd files are always text files!
+        filter_nonexistent_files => 1,
+        force_locale => 'C',
+        verb => 'found',
+        require_match => 1,
+        also_match_stderr => 1,
+        information_only => 1,
+        low_message_priority => 1,
+    },
+        tbd_file_provisions => {
+            # I'd rather not hardcode the name "libSystem", but if we don't we'll run into a lot of
+            # duplicate objects and run into issues.
+            object => qr/^(spath|standardlib):.*libSystem.*tbd\z/,
+            command => ['cmd:cat', 'optpath::'],
+            output => ['symbol:', 'direct_symbol:', 'symbol_in_object:'],
+            # This is a pretty lazy method of finding all of the symbols provided -- we're basically
+            # just looking for every string that looks like its in a list and starts with an _.
+            # We'll probably pick up on a lot of false positives and miss some true positives, but
+            # we should find everything we need for nhfourk specifically.
+            outputarg => qr/\s'?(_[a-zA-z0-9\$_]+)'?(?:\s\]|,)/,
+            outdepends => 'optpath::',
+            verb => 'found',
+            object_dependency => 'outdepends',
+            preference => 10,
+        },
+
+  },
+}

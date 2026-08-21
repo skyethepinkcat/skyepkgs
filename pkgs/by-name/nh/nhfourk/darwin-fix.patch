@@ -1,0 +1,23 @@
+diff --git a/aimake b/aimake
+index aeb62eba..f0370c67 100755
+--- a/aimake
++++ b/aimake
+@@ -11123,7 +11123,7 @@ EOF
+             # -t prints each found object file on its own line on stderr. We
+             # recognise the object files via the extension, and the fact that
+             # they're existing, binary files.
++            output => qr/^(?:(?:-l|lib)[^ ]+ )?\(?(.*?\/.*?(?<!aimake_1)(?:\Q$libext\E|\Q$objext\E|\Q$dllext\E|tbd)(?:\.[0-9]+)?)(?:\)|\([^\/]*\)|\z)/s,
+-            output => qr/^(?:(?:-l|lib)[^ ]+ )?\(?(.*?\/.*?(?<!aimake_1)(?:\Q$libext\E|\Q$objext\E|\Q$dllext\E)(?:\.[0-9]+)?)(?:\)|\([^\/]*\)|\z)/s,
+             output_as_standardlib => 1,
+             filter_text_files => 1,
+             filter_nonexistent_files => 1,
+@@ -11144,7 +11144,7 @@ EOF
+                         "optpath::bpath:aimake/aimake_1$objext",
+                         "optpath:-o :bpath:aimake/aimake_1$exeext",
+                         "optstring:-Wl,-t"],
++            output => qr/^(?:(?:-l|lib)[^ ]+ )?\(?(.*?\/.*?(?<!aimake_1)(?:\Q$libext\E|\Q$objext\E|\Q$dllext\E|tbd)(?:\.[0-9]+)?)(?:\)|\([^\/]*\)|\z)/s,
+-            output => qr/^(?:(?:-l|lib)[^ ]+ )?\(?(.*?\/.*?(?<!aimake_1)(?:\Q$libext\E|\Q$objext\E|\Q$dllext\E)(?:\.[0-9]+)?)(?:\)|\([^\/]*\)|\z)/s,
+             output_as_standardlib => 1,
+             filter_text_files => 1,
+             filter_nonexistent_files => 1,
+                     freebsd => '.so',
