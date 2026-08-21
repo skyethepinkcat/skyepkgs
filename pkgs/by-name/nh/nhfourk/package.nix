@@ -12,9 +12,11 @@
   zlib,
   bison,
   withGui ? false,
+  withServer ? false,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin;
+  with_flag = name: bool: (if bool then "--with=${name}" else "--without=${name}");
   rev = "479383a";
   userDir = "~/.config/NetHackFourk/";
   binPath = lib.makeBinPath [
@@ -22,7 +24,8 @@ let
     less
   ];
   aimake_flags = lib.strings.join " " [
-    (if withGui then "--with=gui" else "--without=gui")
+    (with_flag "gui" withGui)
+    (with_flag "server" withServer)
     "--without=jansson"
     "--override-directory gamesbindir=$out"
     "--override-directory gamesdatadir=$out/share/data"
