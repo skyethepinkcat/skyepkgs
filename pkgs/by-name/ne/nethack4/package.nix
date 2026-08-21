@@ -1,8 +1,6 @@
 {
   SDL2,
   coreutils,
-  fetchFromGitHub,
-  fetchurl,
   flex,
   jansson,
   less,
@@ -16,8 +14,10 @@
   withGui ? false,
 }:
 let
-  rev = "479383a";
-  userDir = "~/.config/NetHackFourk/";
+  rev = "a7213a1d27fabf9e557bbd92b2a4c29b1a73166a";
+  userDir = "~/.config/nethack4/";
+  # old-nixpkgs =
+  #   (builtins.getFlake "github:nixos/nixpkgs/nixos-22.11").legacyPackages.${stdenv.system};
   binPath = lib.makeBinPath [
     coreutils
     less
@@ -31,20 +31,17 @@ let
   ];
 in
 stdenv.mkDerivation {
-  name = "nhfourk";
-  version = "4.3.0.4-${rev}";
+  name = "nethack4";
+  version = "4.3-${rev}";
   hardeningDisable = [ "format" ];
-  src = fetchFromGitHub {
-    owner = "tsadok";
-    repo = "nhfourk";
+  src = fetchGit {
+    url= "http://nethack4.org/media/nethack4.git";
     inherit rev;
-    hash = "sha256-tfCOFPje9VI4dkJyHTm4InYNePAUsFUfeTszXrUn3BA=";
   };
 
-  patches = [
-    ./gcc-flag-fix.patch
-    ./aimake-update.patch # pull patches from nethack4
-  ];
+   patches = [
+     ./gcc-flag-fix.patch
+   ];
   nativeBuildInputs = [
     libc
     zlib
@@ -94,7 +91,7 @@ stdenv.mkDerivation {
   '';
   postInstall = ''
     mkdir -p $out/bin
-    cat <<EOF >$out/bin/nhfourk
+    cat <<EOF >$out/bin/nethack4
     #! ${stdenv.shell} -e
     PATH=${binPath}:\$PATH
 
@@ -122,16 +119,16 @@ stdenv.mkDerivation {
       ln -s \$i \$(basename \$i)
     done
     set +e
-    $out/nhfourk "\$@"
+    $out/nethack4 "\$@"
     if [[ \$? -gt 128 ]]; then
-      echo "nhfourk exited abnormally, attempting to recover save file..."
+      echo "nethack4 exited abnormally, attempting to recover save file..."
       ./recover -d . ?lock.0
     fi
     EOF
-    chmod +x $out/bin/nhfourk
+    chmod +x $out/bin/nethack4
   '';
   #   mkdir -p $out/games/lib/nethackuserdir
-  #   mv $out/var/games/nhfourk/* $out/games/lib/nethackuserdir
+  #   mv $out/var/games/nethack4/* $out/games/lib/nethackuserdir
   #
   #   mkdir -p $out/bin
   #   cat <<EOF >$out/bin/nethack
