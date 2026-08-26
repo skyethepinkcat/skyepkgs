@@ -11,6 +11,7 @@
   stdenv,
   zlib,
   bison,
+  postgresql,
   withGui ? false,
   withServer ? false,
 }:
@@ -27,7 +28,14 @@ let
     (with_flag "gui" withGui)
     (with_flag "server" withServer)
     "--without=jansson"
+    # I wish we could use destdir or trust `-i`, but aimake likes to put stuff in system directories
+    # without telling you, and destdir messes up runtime behavior.
     "--override-directory gamesbindir=$out"
+    "--override-directory bindir=$out/share/bin"
+    "--override-directory configdir=$out/share/config"
+    "--override-directory libdir=$out/lib"
+    "--override-directory mandir=$out/share/man"
+    "--override-directory specificlibdir=$out/lib"
     "--override-directory gamesdatadir=$out/share/data"
     "--override-directory gamesstatedir=$out/share/save"
     "--override-directory shortcutdir=$out/share/applications"
@@ -36,7 +44,7 @@ let
 in
 stdenv.mkDerivation {
   name = "nhfourk";
-  version = "4.3.0.4-${rev}";
+  version = "4.3.0.5-${rev}";
   hardeningDisable = [ "format" ];
   src = fetchFromGitHub {
     owner = "tsadok";
@@ -48,6 +56,9 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "man"
+  ]
+  ++ lib.optionals (!isDarwin) [
+    "lib"
   ];
 
   patches = [
@@ -63,16 +74,23 @@ stdenv.mkDerivation {
     bison
     perl
     jansson
+  ];
+  buildInputs = [
+    zlib
+    jansson
   ]
   ++ lib.optionals withGui [
     SDL2
     libpng
+  ]
+  ++ lib.optionals withServer [
+    postgresql
   ];
 
   # We need to throw in some rules to handle .tbd system libraries on darwin systems, that's what
   # this aimake.local file does.
   preConfigure = lib.optionalString isDarwin ''
-    cp ${aimake_local} aimake.local
+    install -Dm555 ${aimake_local} aimake.local
   '';
 
   configurePhase = ''
@@ -139,6 +157,7 @@ stdenv.mkDerivation {
   '';
   meta = {
     description = "A fork of nethack4.";
+    platforms = if withGui || withServer then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "nhfourk";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
