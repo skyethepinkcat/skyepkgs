@@ -56,9 +56,6 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "man"
-  ]
-  ++ lib.optionals (!isDarwin) [
-    "lib"
   ];
 
   patches = [
