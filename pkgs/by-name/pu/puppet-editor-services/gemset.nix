@@ -19,81 +19,6 @@
     };
     version = "0.5.0";
   };
-  concurrent-ruby = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1qfi2ns3zwkgq616fc127xiqhan7g7m7gqpwriwcr34nds1vxwdj";
-      type = "gem";
-    };
-    version = "1.3.8";
-  };
-  deep_merge = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0fjn4civid68a3zxnbgyjj6krs3l30dy8b4djpg6fpzrsyix7kl3";
-      type = "gem";
-    };
-    version = "1.2.2";
-  };
-  facter = {
-    dependencies = [
-      "hocon"
-      "thor"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "17d561xf4s5016fm9jkfkkafn6660g04fz1yp5xfvkb0j4xj32mp";
-      type = "gem";
-    };
-    version = "4.10.0";
-  };
-  fast_gettext = {
-    dependencies = [ "prime" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1i9anyxdsz3lxlg9cg2dcad1fwykz4lr45v2q3nwjp477b1q8k4w";
-      type = "gem";
-    };
-    version = "3.1.0";
-  };
-  fiddle = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1vifygrkw22gcd4wzh8gc4pv6h1zpk6kll6mmprrf5174wvfxa3z";
-      type = "gem";
-    };
-    version = "1.1.8";
-  };
-  forwardable = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0f78rjpnhm4lgp1qzadnr6kr02b6afh1lvy7w607k4qjk3641kgi";
-      type = "gem";
-    };
-    version = "1.4.0";
-  };
-  getoptlong = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "198vy9dxyzibqdbw9jg8p2ljj9iknkyiqlyl229vz55rjxrz08zx";
-      type = "gem";
-    };
-    version = "0.2.1";
-  };
   hiera-eyaml = {
     dependencies = [
       "base64"
@@ -120,16 +45,6 @@
     };
     version = "3.1.2";
   };
-  hocon = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "106dmzsl1bxkqw5xaif012nwwfr3k9wff32cqc77ibjngknj6477";
-      type = "gem";
-    };
-    version = "1.4.0";
-  };
   io-console = {
     groups = [ "default" ];
     platforms = [ ];
@@ -139,17 +54,6 @@
       type = "gem";
     };
     version = "0.9.2";
-  };
-  locale = {
-    dependencies = [ "fiddle" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1x1fnf4knvyzb9br6ja7b1nvy0860nax0i8rx4ljrnvbmbl06s0w";
-      type = "gem";
-    };
-    version = "2.1.5";
   };
   logger = {
     groups = [ "default" ];
@@ -171,16 +75,6 @@
     };
     version = "0.8.0";
   };
-  multi_json = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1040lr5y2phn7avdyam6zw6ikprlmk77biw3yhclsfwfh0qnl4p6";
-      type = "gem";
-    };
-    version = "1.21.1";
-  };
   optimist = {
     groups = [ "default" ];
     platforms = [ ];
@@ -200,42 +94,6 @@
       type = "gem";
     };
     version = "0.6.3";
-  };
-  prime = {
-    dependencies = [
-      "forwardable"
-      "singleton"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0pi2g9sd9ssyrpvbybh4skrgzqrv0rrd1q7ylgrsd519gjzmwxad";
-      type = "gem";
-    };
-    version = "0.1.4";
-  };
-  puppet = {
-    dependencies = [
-      "concurrent-ruby"
-      "deep_merge"
-      "facter"
-      "fast_gettext"
-      "getoptlong"
-      "locale"
-      "multi_json"
-      "puppet-resource_api"
-      "scanf"
-      "semantic_puppet"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0fia3ji6isnqz4a31aq8k4nd8p7vkxn80hhgqfdc8kkrba7xxxgj";
-      type = "gem";
-    };
-    version = "8.10.0";
   };
   puppet-editor-services = {
     dependencies = [
@@ -485,20 +343,8 @@
     };
     version = "3.0.0";
   };
-  puppet-resource_api = {
-    dependencies = [ "hocon" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1j6gdm7r89qzwn2vvf7yks53s56yp5gwyc8xycmhwk7503kazdfl";
-      type = "gem";
-    };
-    version = "1.9.2";
-  };
   puppet-strings = {
     dependencies = [
-      "puppet"
       "rgen"
       "yard"
     ];
@@ -506,10 +352,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "12zsarq3pjxm71k7wj09a8rdqrbf0ssxkr67s10p972dmcfj54wz";
+      sha256 = "0z77hfg2mczfbm8g0fil3vkg2smkqhqx3b1kgmcm079fam3pky80";
       type = "gem";
     };
-    version = "5.0.0";
+    version = "5.1.0";
   };
   puppetfile-resolver = {
     dependencies = [
@@ -556,16 +402,6 @@
     };
     version = "0.10.2";
   };
-  scanf = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "000vxsci3zq8m1wl7mmppj7sarznrqlm6v2x2hdfmbxcwpvvfgak";
-      type = "gem";
-    };
-    version = "1.0.0";
-  };
   semantic_puppet = {
     groups = [ "default" ];
     platforms = [ ];
@@ -575,16 +411,6 @@
       type = "gem";
     };
     version = "1.1.1";
-  };
-  singleton = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0y2pc7lr979pab5n5lvk3jhsi99fhskl5f2s6004v8sabz51psl3";
-      type = "gem";
-    };
-    version = "0.3.0";
   };
   syslog = {
     dependencies = [ "logger" ];
@@ -596,16 +422,6 @@
       type = "gem";
     };
     version = "0.4.0";
-  };
-  thor = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0k7j2wn14h1pl4smibasw0bp66kg626drxb59z7rzflch99cd4rg";
-      type = "gem";
-    };
-    version = "1.2.2";
   };
   voxpupuli-puppet-lint-plugins = {
     dependencies = [
