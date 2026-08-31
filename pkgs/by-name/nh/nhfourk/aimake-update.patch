@@ -1,0 +1,122 @@
+diff --git a/aimake b/aimake
+index aeb62eba..19852ae8 100755
+--- a/aimake
++++ b/aimake
+@@ -4704,12 +4704,31 @@ sub ospath2aipath {
+     my $required_by = shift;
+     my $force_spath = shift || 0;
+
++    # We generally want to canonicalise the path; however, some operating
++    # systems store important information in the filename itself (especially
++    # for shared libraries) and so canonicalising the filename part of the
++    # path can lose that information, potentially causing build failures.
++    #
++    # As such, this does a realpath of the directory containing the file,
++    # but not on the file itself.
++    #
+     # If we're trying to convert a nonexistent path, we won't be able to
+     # realpath it successfully. So we need an eval to trap errors.
+-    $ospath = eval {
+-        !defined $required_by || File::Spec->file_name_is_absolute($ospath)
+-            and realpath($ospath);
+-    } || $ospath;
++    if (!defined $required_by ||
++        File::Spec->file_name_is_absolute($ospath)) {
++        my ($vol, $dirs, $file) = File::Spec->splitpath($ospath);
++        if (File::Spec->no_upwards(($file))) {
++            my $osdir = File::Spec->catpath($vol, $dirs, '');
++            $osdir = eval { realpath($osdir) } || $osdir;
++            $ospath = File::Spec->catfile($osdir, $file);
++        } else {
++            # If the path ends in "." or "..", it is necessarily a directory
++            # even if there is no trailing slash, and it needs to be
++            # canonicalised in order to ensure that files inside the source
++            # directory are interpreted as being in the source directory.
++            $ospath = eval { realpath($ospath) } || $ospath;
++        }
++    }
+
+     if (File::Spec->case_tolerant) {
+         $ospath = defined_or(
+@@ -5047,7 +5066,7 @@ sub calculate_installation_path {
+         # On Windows, being Administrator is insufficient to override an
+         # "admins can't..." permission (unlike on Linux), so we force the
+         # admins to have full permission, and only control the ACL for
+-        # Everyone. Otherwise, system administration can become quote
++        # Everyone. Otherwise, system administration can become quite
+         # difficult.
+         #
+         # Also, for some crazy reason, execute permission is needed to read a
+@@ -6609,15 +6628,6 @@ sub atomic_read(&) {
+     $_[0]->();
+ }
+
+-# Set up our crash handlers.
+-# A crash handler.
+-$SIG{__DIE__} = sub {
+-    die @_ if $^S;
+-    write_statefile;
+-    confess @_;
+-};
+-use sigtrap qw/die normal-signals/; # convert SIGINT etc. into die()
+-
+ # Initializes the statefile at the start of the program.
+ # It doesn't make sense to atomically{} here, because the statefile doesn't
+ # exist in memory before the call its used.
+@@ -8294,7 +8304,7 @@ my $configsafe = new Safe;
+ $configsafe->permit_only(qw/null stub scalar pushmark const undef list qr
+                             negate lineseq leaveeval anonlist anonhash rv2sv
+                             sassign nextstate padany regcreset concat
+-                            stringify quotemeta rv2gv/);
++                            stringify quotemeta rv2gv emptyavhv/);
+
+ # These are global, not lexical, so we can share them with the config file
+ our $libext = $Config{_a};
+@@ -8835,6 +8845,19 @@ atomically {
+         'sys:installing', 'initial config';
+ };
+
++##### Crash handling
++#
++# We set up the crash handlers only just before the main loop starts, so that
++# we don't try to write a statefile if the checks above fail.
++
++# A crash handler.
++$SIG{__DIE__} = sub {
++    die @_ if $^S;
++    write_statefile;
++    confess @_;
++};
++use sigtrap qw/die normal-signals/; # convert SIGINT etc. into die()
++
+
+ ##### Main loop.
+ #
+@@ -9086,9 +9109,15 @@ MAINLOOP: while (1) {
+                 $runnable = 0;
+             }
+
+-            if (!(rule_applies_to_object $rule, $object) ||
+-                !(object_exists $object) ||
+-                !(object_exists "config_rule:$rule")) {
++            my $outdated_reason = undef;
++            rule_applies_to_object $rule, $object
++                or $outdated_reason = "the rule no longer applies to the object";
++            object_exists $object
++                or $outdated_reason = "the object no longer exists";
++            object_exists "config_rule:$rule"
++                or $outdated_reason = "the rule no longer exists";
++
++            if ($outdated_reason) {
+                 # We're deleting it.
+                 # Clean it.
+                 record_pair_outputs $curpair, {};
+@@ -9103,7 +9132,7 @@ MAINLOOP: while (1) {
+                 # And now, the pair isn't mentioned anywhere at all, so we can
+                 # move onto the next one.
+                 progress_report 1,
+-                "Deleting outdated rule+object pair '$curpair'...";
++                "Deleting outdated rule+object pair '$curpair' because $outdated_reason...";
+                 $runnable = 0;
+             } else {
+                 # Check the rule's xuse for objects that don't exist, or that

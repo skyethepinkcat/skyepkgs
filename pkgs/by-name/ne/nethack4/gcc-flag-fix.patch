@@ -1,0 +1,13 @@
+diff --git a/aimake b/aimake
+index aeb62eba..9638d4fe 100755
+--- a/aimake
++++ b/aimake
+@@ -11435,7 +11435,7 @@ EOF
+         # getting out of date.
+         c_precompile_tool => {
+             output => 'tool:c_precompile',
+-            outdepends => ['tool:c_toolchain', 'optionset:CFLAGS'],
++            outdepends => ['tool:c_toolchain', 'optionset:CFLAGS', 'optstring:-x c-header'],
+             verb => 'found',
+         },
+         precompile_headers => {
