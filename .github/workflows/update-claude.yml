@@ -28,7 +28,7 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Run update script
-        run: nix shell nixpkgs#nix-update -c ./update.sh claude
+        run: nix shell nixpkgs#nix-update -c ./update.sh claude --impure
         env:
           NIXPKGS_ALLOW_UNFREE: "1"
 
