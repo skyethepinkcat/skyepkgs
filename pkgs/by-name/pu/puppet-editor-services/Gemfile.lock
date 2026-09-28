@@ -9,7 +9,7 @@ GEM
       optimist (~> 3.1)
     highline (3.1.2)
       reline
-    io-console (0.9.2)
+    io-console (0.9.4)
     logger (1.7.0)
     molinillo (0.8.0)
     optimist (3.2.1)
