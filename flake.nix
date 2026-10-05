@@ -47,7 +47,7 @@
         {
           packages = availablePkgs;
 
-          legacyPackages.vimPlugins = allPkgs.vimPlugins;
+          legacyPackages = allPkgs;
 
           checks = availablePkgs;
 
