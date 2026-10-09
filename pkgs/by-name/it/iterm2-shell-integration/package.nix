@@ -1,18 +1,24 @@
 {
   fetchFromGitHub,
   stdenv,
+unstableGitUpdater,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "iterm2-shell-integration";
+  version = "0-unstable-2026-09-20";
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2-shell-integration";
-    rev = "195281b";
-    hash = "sha256-x2+5pCz/QOg8Lbuykn7gRJeQ2mhWEupWb16/bNnNxAw=";
+    rev = "bbf5a33cf625ea57df99f8ccc4dff8823044b695";
+    hash = "sha256-hlBmPTFyBDNBvmbClyZZPYZ7C+IZodsWU8B+WxHrHjY=";
   };
 
   dontConfigure = true;
   dontBuild = true;
+  passthru.updateScript = unstableGitUpdater {
+    branch = "main";
+  } ;
+
   installPhase = ''
     runHook preInstall
 

@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "claude";
-    version = "2.19675.1,8613680e2e16d90700c039e084a7883f321ed4e3";
+    version = "2.31226.1,8576520051724193e9f74fc538f9ce8125e9ddd2";
 
     src = fetchzip {
       url = "https://downloads.claude.ai/releases/darwin/universal/${version1}/Claude-${version2}.zip";
