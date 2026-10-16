@@ -25,15 +25,15 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ];
     programs = {
-   bash.initExtra = mkIf cfg.enableBashIntegration ''
-      source ${cfg.package}/share/iterm2-shell-integration/shell-integration.bash
-    '';
-    zsh.initContent = mkIf cfg.enableZshIntegration ''
-      source ${cfg.package}/share/iterm2-shell-integration/shell-integration.zsh
-    '';
-     fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
-       source ${cfg.package}/share/iterm2-shell-integration/shell-integration.fish
-     '';
+      bash.initExtra = mkIf cfg.enableBashIntegration ''
+        source ${cfg.package}/share/iterm2-shell-integration/shell-integration.bash
+      '';
+      zsh.initContent = mkIf cfg.enableZshIntegration ''
+        source ${cfg.package}/share/iterm2-shell-integration/shell-integration.zsh
+      '';
+      fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
+        source ${cfg.package}/share/iterm2-shell-integration/shell-integration.fish
+      '';
     };
   };
 }

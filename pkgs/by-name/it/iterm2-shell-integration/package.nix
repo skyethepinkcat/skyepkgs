@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   stdenv,
-unstableGitUpdater,
+  unstableGitUpdater,
 }:
 stdenv.mkDerivation rec {
   name = "iterm2-shell-integration";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   passthru.updateScript = unstableGitUpdater {
     branch = "main";
-  } ;
+  };
 
   installPhase = ''
     runHook preInstall
