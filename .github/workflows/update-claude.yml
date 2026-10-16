@@ -22,11 +22,12 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
-      - uses: cachix/cachix-action@v17
+      - name: Setup Attic cache
+        uses: ryanccn/attic-action@v0
         with:
-          name: skyethepinkcat
-          # If you chose API tokens for write access OR if you have a private cache
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          endpoint: "https://nix-cache.skyenet.online"
+          cache: "skyenet"
+          token: ${{ secrets.ATTIC_AUTH_TOKEN }}
 
       - name: Run update script
         run: nix shell nixpkgs#nix-update -c ./update.sh claude --impure

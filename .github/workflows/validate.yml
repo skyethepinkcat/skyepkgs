@@ -26,14 +26,15 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
-      - uses: cachix/cachix-action@v17
+      - name: Setup Attic cache
+        uses: ryanccn/attic-action@v0
         with:
-          name: skyethepinkcat
-          # If you chose API tokens for write access OR if you have a private cache
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          endpoint: "https://nix-cache.skyenet.online"
+          cache: "skyenet"
+          token: ${{ secrets.ATTIC_AUTH_TOKEN }}
 
       - name: Evaluate all package derivations
-        run: nix flake check --no-build --impure
+        run: nix run nixpkgs#nix-fast-build --impure -- --skip-cached --attic-cache skyenet
         env:
           NIXPKGS_ALLOW_UNFREE: "1"
 
