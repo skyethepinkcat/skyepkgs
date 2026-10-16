@@ -34,6 +34,10 @@ jobs:
           token: ${{ secrets.ATTIC_AUTH_TOKEN }}
 
       - name: Evaluate all package derivations
-        run: nix run nixpkgs#nix-fast-build -- --skip-cached --attic-cache skyenet --impure --fallback
+        run: nix run nixpkgs#nix-fast-build -- --skip-cached --attic-cache skyenet --impure
         env:
           NIXPKGS_ALLOW_UNFREE: "1"
+
+      - name: Check formatting
+        run: |
+          nix fmt
