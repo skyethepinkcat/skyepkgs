@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.ATTIC_AUTH_TOKEN }}
 
       - name: Evaluate all package derivations
-        run: nix run nixpkgs#nix-fast-build --impure -- --skip-cached --attic-cache skyenet
+        run: nix run nixpkgs#nix-fast-build -- --skip-cached --attic-cache skyenet --impure
         env:
           NIXPKGS_ALLOW_UNFREE: "1"
 
