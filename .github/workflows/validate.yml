@@ -37,6 +37,7 @@ jobs:
         run: nix run nixpkgs#nix-fast-build -- --skip-cached --attic-cache skyenet --impure --option fallback 1
         env:
           NIXPKGS_ALLOW_UNFREE: "1"
+          NIX_CONFIG: "fallback = 1"
 
       - name: Check formatting
         run: |
