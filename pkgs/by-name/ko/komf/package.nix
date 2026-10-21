@@ -39,6 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
   # default nixDownloadDeps resolves the Android variants too, which need an SDK
   gradleUpdateTask = finalAttrs.gradleBuildTask;
 
+  # AGP needs a writable ~/.android; inside the update script's bwrap the JVM
+  # can't resolve user.home (no passwd entry) and falls back to "?"
+  preConfigure = ''
+    export ANDROID_USER_HOME="$(mktemp -d)"
+  '';
+
   doCheck = false;
 
   installPhase = ''
