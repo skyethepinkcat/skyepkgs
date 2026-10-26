@@ -42,3 +42,6 @@ jobs:
       - name: Check formatting
         run: |
           nix fmt
+        env:
+          NIXPKGS_ALLOW_UNFREE: "1"
+          NIX_CONFIG: "fallback = 1"
