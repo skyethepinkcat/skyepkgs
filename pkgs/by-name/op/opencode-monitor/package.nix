@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opencode-monitor";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
 
   src = python3Packages.fetchPypi {
     pname = "opencode_monitor";
     inherit version;
-    sha256 = "sha256-oscWPfMNoMA3PbYs87e10JDHoEWM1ytYxXxM9eg9N88=";
+    sha256 = "sha256-HLP8C3lepulaZegybG5QdsNUqel+uFqvet6kb5NEaYs=";
   };
 
   build-system = with python3Packages; [

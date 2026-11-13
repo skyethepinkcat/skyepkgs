@@ -5,12 +5,12 @@
 }:
 stdenv.mkDerivation rec {
   name = "iterm2-shell-integration";
-  version = "0-unstable-2026-10-20";
+  version = "0-unstable-2026-11-11";
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2-shell-integration";
-    rev = "ae52c2d8a1e5b2783f96c642dad4fe69cc55d9cb";
-    hash = "sha256-/NjzanNlc+f/3cFGv1d3/JZcdf67jmX+bX1tq+Akd1w=";
+    rev = "721976d2e1738806f9eaa9f926c5d2932dc23fed";
+    hash = "sha256-LHRc8d3frNiFAKzekbdtXlEZpgR8OVj5Tj3U2X7TGCI=";
   };
 
   dontConfigure = true;
