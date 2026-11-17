@@ -17,11 +17,11 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "claude";
-    version = "2.42304.2,af65c0e384c1657459441aac3083c6e622789afe";
+    version = "6.6395.0,d71a20056be3b25708751e98bef60759ea1f441b";
 
     src = fetchzip {
       url = "https://downloads.claude.ai/releases/darwin/universal/${version1}/Claude-${version2}.zip";
-      hash = "sha256-YTB8FiQFmYdfItts1nqnY3y0ky+lbegWkNgGDzX9YBU=";
+      hash = "sha256-iEECJTqRkMqnPP9IdeLDROdgAmkRCO5BA+D05dNY0KY=";
       stripRoot = false;
     };
 
