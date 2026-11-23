@@ -6,6 +6,8 @@
   jre,
   makeWrapper,
   fetchFromGitHub,
+  writeShellApplication,
+  nix-update,
 }:
 let
   gradle = gradle_9.override { java = jdk17; };
@@ -46,6 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = false;
+
+  # bump version/src hash, then regenerate deps.json against the *new* source;
+  # mitmCache.updateScript bakes in the src drv, so it must be re-evaluated after the bump
+  passthru.updateScript =
+    let
+      drv = writeShellApplication {
+        name = "update-komf";
+        runtimeInputs = [ nix-update ];
+        text = ''
+          attr="''${UPDATE_NIX_ATTR_PATH:-komf}"
+          nix-update --flake "$attr" "$@"
+          "$(nix build --no-link --print-out-paths ".#$attr.mitmCache.updateScript")"
+        '';
+      };
+    in
+    [ "${drv}/bin/update-komf" ];
 
   installPhase = ''
     runHook preInstall
